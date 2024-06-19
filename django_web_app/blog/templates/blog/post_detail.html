@@ -1,0 +1,65 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<div class="jumbotron mt-3 shadow-lg">
+    <article class="media content-section shadow">
+        <a href="{{ post.author.profile.image.url }}" target="_blank" data-lightbox="profile-image">
+            <img src="{{ post.author.profile.image.url }}" alt="" class="article-img rounded-circle img-thumbnail img-fluid">
+        </a>
+
+        <div class="media-body position-relative">
+            <div class="">
+                <div class="d-flex justify-content-between">
+                    <h2>{{ post.title }}</h2>
+                    <small class="text-muted">{{ post.date_posted }}</small>
+                </div>
+                {% if post.author != user %}
+                <div class="form-group mt-0 pt-0 d-flex justify-content-end">
+                    {% if post.poster_image %}
+                    <a href="{{ post.poster_image.url }}" download class="btn btn-primary flex-last" type="submit"><i class="fas fa-download"></i> Download Poster</a>
+                    {% endif %}
+                    {% if post.video_file %}
+                    <a href="{{ post.video_file.url }}" download class="btn btn-primary flex-last ml-2" type="submit"><i class="fas fa-download"></i> Download Video</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <hr>
+                {% if post.author == user %}
+                <div>
+                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
+                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">Delete</a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="row mt-3 justify-content-center">
+                <div class="col-md-3">
+                    {% if post.poster_image %}
+                    <a href="{{ post.poster_image.url }}" data-lightbox="poster-image"><img src="{{ post.poster_image.url }}" alt="" class="img-fluid"></a>
+                    {% endif %}
+                </div>
+                <div class="col-md-7 d-flex mx-auto">
+                    {% if post.video_file %}
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <video class="embed-responsive-item" controls>
+                            <source src="{{ post.video_file.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <p class="article-content"></p>
+            <p class="article-content">{{ post.description }}</p>
+            <p><strong>Duration:</strong> {{ post.duration }}</p>
+            <p><strong>Director:</strong> {{ post.director }}</p>
+            <p><strong>Actors:</strong> {{ post.actors }}</p>
+            <p><strong>Reviews:</strong></p>
+            <p>{{ post.reviews }}</p>
+
+            <a class="text-end" href="{% url 'user-posts' post.author.username %}">
+                <p><strong>Author:</strong> {{ post.author }}</p>
+            </a>
+        </div>
+    </article>
+</div>
+{% endblock content %}
